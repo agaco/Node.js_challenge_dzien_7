@@ -1,19 +1,31 @@
+let list;
+let listWrapper = document.getElementsByClassName('todo-list')
+
 window.addEventListener('load', () => {
- console.log('fdsfsdf')
+ console.log(listWrapper)
 })
 
 $(function(){
 
  fetch('/getList', {
   method : 'GET',
-  // body : JSON.stringify({
-  //  name : 'Imię',
-  //  surname : 'Nazwisko',
-  // }),
   headers: {
    'Content-Type': 'application/json',
   }
  })
-.then(res => console.log(res))
+.then(res => res && res.ok && res.json())
+.then(data => list = data)
+.then(() => console.log(list))
+.then(() => {
+ list.forEach(item => {
+  $(".todo-list").append(`<li class=${item.completed && 'completed'}>
+    <div class="view">
+        <input class="toggle" type="checkbox" ${item.completed && 'checked'}>
+         <label>${item.title}</label>
+         <button class="destroy"></button>
+    </div>
+</li>`);
+ })
+})
 
 });

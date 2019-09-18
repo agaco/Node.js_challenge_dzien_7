@@ -5,6 +5,26 @@ window.addEventListener('load', () => {
  console.log(listWrapper)
 })
 
+document.addEventListener('keydown', event => {
+ if (event.keyCode === 13) {
+  const id = Math.floor(Math.random() * 100);
+  const payload = {
+   'id': id,
+   'title': event.target.value,
+   'completed': false
+  }
+
+  fetch('/add', {
+   method : 'POST',
+   headers: {
+    'Content-Type': 'application/json',
+   },
+   body : JSON.stringify(payload)
+  })
+
+ }
+});
+
 $(function(){
 
  fetch('/getList', {
@@ -15,7 +35,6 @@ $(function(){
  })
 .then(res => res && res.ok && res.json())
 .then(data => list = data)
-.then(() => console.log(list))
 .then(() => {
  list.forEach(item => {
   $(".todo-list").append(`<li class=${item.completed && 'completed'}>

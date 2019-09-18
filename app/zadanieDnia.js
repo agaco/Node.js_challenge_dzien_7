@@ -25,6 +25,21 @@ app.get('/getList', (req, res) => {
  });
 });
 
+app.post('/add', (req, res) => {
+ const message = req.body;
+ console.log('added text', message)
+ fs.readFile(dbPath, (err, data) => {
+  if (!err){
+   const shoppingList = JSON.parse(data);
+   shoppingList.push(message)
+   res.send(shoppingList);
+  } else {
+   console.log('Błąd odczytu pliku', err);
+   res.send('Wystąpił błąd odczytu.');
+  }
+ });
+});
+
 
 
 

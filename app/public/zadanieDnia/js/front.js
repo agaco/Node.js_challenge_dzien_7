@@ -14,7 +14,7 @@ fetch('/getList', {
     <div class="view">
         <input class="toggle" type="checkbox" ${item.completed && 'checked'}>
          <label>${item.title}</label>
-         <button class="destroy"></button>
+         <button class="destroy" onClick='removeEvent("777")'></button>
     </div>
 </li>`);
  })
@@ -22,8 +22,6 @@ fetch('/getList', {
 
 
 $(function(){
-window.addEventListener('load', () => {
-})
 
 document.addEventListener('keydown', event => {
  if (event.keyCode === 13) {
@@ -57,8 +55,12 @@ document.addEventListener('keydown', event => {
 </li>`);
    })
   })
-
  }
 });
 
 });
+
+const removeEvent = (event) => {
+ console.log('tesst')
+ console.log(event)
+}

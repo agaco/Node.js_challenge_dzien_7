@@ -28,11 +28,20 @@ app.get('/getList', (req, res) => {
 app.post('/add', (req, res) => {
  const message = req.body;
  console.log('added text', message)
+
+ ///read from file
  fs.readFile(dbPath, (err, data) => {
   if (!err){
    const shoppingList = JSON.parse(data);
-   shoppingList.push(message)
-   res.send(shoppingList);
+   shoppingList.push(message);
+
+   console.log('this is shopping list', JSON.stringify(shoppingList))
+
+   fs.writeFile(dbPath, JSON.stringify(shoppingList), (error) => {
+    console.log('error is ', error)
+    !error && res.send(JSON.stringify(shoppingList));
+   })
+   // res.send(shoppingList);
   } else {
    console.log('Błąd odczytu pliku', err);
    res.send('Wystąpił błąd odczytu.');

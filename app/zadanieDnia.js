@@ -35,7 +35,7 @@ app.post('/add', (req, res) => {
    const shoppingList = JSON.parse(data);
    shoppingList.push(message);
 
-   console.log('this is shopping list', JSON.stringify(shoppingList))
+   // console.log('this is shopping list', JSON.stringify(shoppingList))
 
    fs.writeFile(dbPath, JSON.stringify(shoppingList), (error) => {
     console.log('error is ', error)

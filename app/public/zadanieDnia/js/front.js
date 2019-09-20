@@ -1,5 +1,36 @@
 let list;
 let listWrapper = document.getElementsByClassName('todo-list')
+let listParent = document.getElementsByClassName('main')
+let newList = document.createElement('ul');
+newList.classList.add('todo-list');
+
+const listElement = (item) => {
+ let listItem = document.createElement('li');
+ let wrapper = document.createElement('div')
+ let listLabel = document.createElement('label');
+ let listbtn = document.createElement('button');
+ let listInput = document.createElement('input');
+
+ item.completed && listItem.classList.add('completed')
+ listLabel.innerText = item.title
+ listbtn.classList.add('destroy')
+ listInput.classList.add('toggle')
+ item.completed && listInput.setAttribute('checked', true);
+ listInput.type = 'checkbox'
+ wrapper.classList.add('view');
+ wrapper.appendChild(listInput)
+ wrapper.appendChild(listLabel)
+ wrapper.appendChild(listbtn);
+
+ listItem.appendChild(wrapper);
+ listbtn.addEventListener('click', () => {
+  removeEvent(item)
+ });
+ console.log(listItem)
+ return listItem
+}
+
+//////////////////////////////////////////////////////////
 
 
 fetch('/getList', {
@@ -8,17 +39,7 @@ fetch('/getList', {
 })
 .then(res => res && res.ok && res.json())
 .then(data => list = data)
-.then(() => {
- list.forEach(item => {
-  $(".todo-list").append(`<li class=${item.completed && 'completed'}>
-    <div class="view">
-        <input class="toggle" type="checkbox" ${item.completed && 'checked'}>
-         <label>${item.title}</label>
-         <button class="destroy" onClick='removeEvent("777")'></button>
-    </div>
-</li>`);
- })
-})
+.then(() => list.forEach(item => listWrapper[0].append(listElement(item))))
 
 
 $(function(){
@@ -41,20 +62,10 @@ document.addEventListener('keydown', event => {
   })
   .then(res => {
    $(".todo-list")[0].remove();
+   listParent[0].appendChild(newList);
    return res && res.ok && res.json()
   })
-  .then((data) => {
-   $(".main").append("<ul class='todo-list'></ul>")
-   data.forEach(item => {
-    $("ul.todo-list").append(`<li class=${item.completed && 'completed'}>
-    <div class="view">
-        <input class="toggle" type="checkbox" ${item.completed && 'checked'}>
-         <label>${item.title}</label>
-         <button class="destroy"></button>
-    </div>
-</li>`);
-   })
-  })
+  .then((data) => data.forEach(item => listWrapper[0].append(listElement(item))))
  }
 });
 
@@ -62,5 +73,5 @@ document.addEventListener('keydown', event => {
 
 const removeEvent = (event) => {
  console.log('tesst')
- console.log(event)
+ // console.log(event)
 }

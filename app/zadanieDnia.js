@@ -25,9 +25,9 @@ app.get('/getList', (req, res) => {
  });
 });
 
+////////// ADD //////////
 app.post('/add', (req, res) => {
  const message = req.body;
- console.log('added text', message)
 
  ///read from file
  fs.readFile(dbPath, (err, data) => {
@@ -38,7 +38,6 @@ app.post('/add', (req, res) => {
    // console.log('this is shopping list', JSON.stringify(shoppingList))
 
    fs.writeFile(dbPath, JSON.stringify(shoppingList), (error) => {
-    console.log('error is ', error)
     !error && res.send(JSON.stringify(shoppingList));
    })
    // res.send(shoppingList);
@@ -49,8 +48,53 @@ app.post('/add', (req, res) => {
  });
 });
 
+//////// DELETE /////////
+app.delete('/del/:id', (req, res) => {
+const id = parseInt(req.params.id);
+ ///read from file
+ fs.readFile(dbPath, (err, data) => {
+  if (!err){
+   const shoppingList = JSON.parse(data);
+   const updatedList = shoppingList.filter(item => item.id !== id);
 
+   fs.writeFile(dbPath, JSON.stringify(updatedList), (error) => {
+    !error && res.send(JSON.stringify(updatedList));
+   })
+  } else {
+   console.log('Błąd odczytu pliku', err);
+   res.send('Wystąpił błąd odczytu.');
+  }
+ });
 
+})
+
+//////// EDIT /////////
+app.post('/edit/:id', (req, res) => {
+ const id = parseInt(req.params.id);
+ const payload = req.body;
+ ///read from file
+ fs.readFile(dbPath, (err, data) => {
+  if (!err){
+   const shoppingList = JSON.parse(data);
+   const updatedList = shoppingList.map(item => {
+     console.log(item)
+     if (item.id == id) {
+      const status = item.completed;
+      item.completed = !status
+     }
+    return item
+  });
+
+   fs.writeFile(dbPath, JSON.stringify(updatedList), (error) => {
+    !error && res.send(JSON.stringify(updatedList));
+   })
+  } else {
+   console.log('Błąd odczytu pliku', err);
+   res.send('Wystąpił błąd odczytu.');
+  }
+ });
+
+})
 
 
 

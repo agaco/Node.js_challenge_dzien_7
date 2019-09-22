@@ -77,7 +77,6 @@ app.post('/edit/:id', (req, res) => {
   if (!err){
    const shoppingList = JSON.parse(data);
    const updatedList = shoppingList.map(item => {
-     console.log(item)
      if (item.id == id) {
       const status = item.completed;
       item.completed = !status
